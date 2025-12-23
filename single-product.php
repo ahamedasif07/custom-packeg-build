@@ -40,7 +40,7 @@ $addOns = [
                         <span
                             class="bg-blue-500/30 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-blue-400/50">Most
                             Popular</span>
-                        <h2 class="text-3xl font-bold mt-6 mb-2"><?php echo $packageName; ?></h2>
+                        <h2 class="text-3xl text-white! mt-4! font-bold mb-0! "><?php echo $packageName; ?></h2>
                         <p class="text-blue-100">The foundation of home security.</p>
                     </div>
                 </div>
@@ -114,7 +114,7 @@ $addOns = [
                                 </div>
 
                                 <!-- buttons to + - -->
-                                <div class="flex items-center absolute bottom-3 left-4 mt-2! space-x-1 z-20">
+                                <div class="flex items-center absolute bottom-3 left-5 mt-2! space-x-1 z-20">
                                     <button type="button"
                                         class="qty-btn bg-transparent! decrease-btn w-5! h-5! border-gray-200! border!  rounded text-sm flex items-center justify-center hover:bg-gray-200 text-gray-900! mb-0.5! text-[26px]! shadow!">-</button>
                                     <span class="qty-value w-6 text-center text-sm font-bold">1</span>
@@ -123,7 +123,7 @@ $addOns = [
                                 </div>
 
                                 <h4 class="font-bold text-slate-900"><?php echo $item['name']; ?></h4>
-                                <p class="text-xs text-slate-500 mt-1 leading-relaxed"><?php echo $item['desc']; ?></p>
+                                <p class="text-xs text-slate-500  leading-relaxed"><?php echo $item['desc']; ?></p>
                             </label>
                         </div>
                     <?php endforeach; ?>
