@@ -35,7 +35,7 @@ $addOns = [
 
             <div
                 class="w-full lg:w-[420px] shrink-0 bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden sticky top-10">
-                <div class="bg-blue-600 p-8 text-white relative overflow-hidden">
+                <div class="bg-[#045CB4]! p-8 text-white relative overflow-hidden">
                     <div class="relative z-10">
                         <span
                             class="bg-blue-500/30 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-blue-400/50">Most
@@ -69,7 +69,7 @@ $addOns = [
 
                     <div class="flex flex-col">
                         <button
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-[0.98]">Purchase
+                            class="w-full bg-[#045CB4]! hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-[0.98]">Purchase
                             Package</button>
                         <div class="h-4"></div>
                         <button id="showAddonsBtn"
@@ -103,8 +103,9 @@ $addOns = [
                                 class="block p-5 border-2 border-slate-100 rounded-2xl cursor-pointer transition-all peer-checked:border-blue-500 peer-checked:bg-blue-50/50 hover:border-blue-200">
                                 <div class="flex justify-between items-start mb-3">
                                     <div
-                                        class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 peer-checked:bg-blue-100 peer-checked:text-blue-600">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        class="w-10 h-10  bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 peer-checked:bg-blue-100 group-hover:bg-[#045CB4]! transition-all duration-500! ease-in-out peer-checked:text-blue-600">
+                                        <svg class="w-6 h-6 group-hover:text-white! transition-all duration-500! ease-in-out"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
