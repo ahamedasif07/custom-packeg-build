@@ -2,7 +2,6 @@
 /* Template Name: Single-Product */
 get_header();
 
-// ডাইনামিক ডাটা সেটআপ
 $basePrice = 29.99;
 $packageName = "Basic Protection";
 
@@ -70,9 +69,8 @@ $addOns = [
 
                     <div class="flex flex-col">
                         <button
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-[0.98]">
-                            Purchase Package
-                        </button>
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-[0.98]">Purchase
+                            Package</button>
                         <div class="h-4"></div>
                         <button id="showAddonsBtn"
                             class="w-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 group">
@@ -97,7 +95,7 @@ $addOns = [
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <?php foreach ($addOns as $item): ?>
-                        <div class="group relative">
+                        <div class="group relative addon-item-container">
                             <input type="checkbox" class="addon-checkbox peer hidden" id="<?php echo $item['id']; ?>"
                                 data-name="<?php echo $item['name']; ?>" data-price="<?php echo $item['price']; ?>">
 
@@ -110,19 +108,20 @@ $addOns = [
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        <!-- incress button stsrt-->
-                                        <div class="flex items-center absolute bottom-3 left-4 space-x-1">
-                                            <button id="decrease"
-                                                class="w-6 h-6 bg-gray-100 text-gray-700 rounded text-sm flex items-center justify-center">-</button>
-                                            <span id="value" class="w-6 text-center text-sm">1</span>
-                                            <button id="increase"
-                                                class="w-6 h-6 bg-gray-100 text-gray-700 rounded text-sm flex items-center justify-center">+</button>
-                                        </div>
-                                        <!-- incress button end-->
-
                                     </div>
-                                    <span class="text-sm font-bold text-blue-600">+$<?php echo $item['price']; ?></span>
+                                    <span
+                                        class="text-sm font-bold text-blue-600 item-price-display">+$<?php echo $item['price']; ?></span>
                                 </div>
+
+                                <!-- buttons to + - -->
+                                <div class="flex items-center absolute bottom-3 left-4 mt-2! space-x-1 z-20">
+                                    <button type="button"
+                                        class="qty-btn bg-transparent! decrease-btn w-5! h-5! border-gray-200! border!  rounded text-sm flex items-center justify-center hover:bg-gray-200 text-gray-900! mb-0.5! text-[26px]! shadow!">-</button>
+                                    <span class="qty-value w-6 text-center text-sm font-bold">1</span>
+                                    <button type="button"
+                                        class="qty-btn increase-btn w-5! h-5! bg-transparent! mb-0.5! border-gray-200! border! rounded text-sm flex items-center justify-center text-gray-900! hover:bg-gray-200 text-[22px]! shadow!">+</button>
+                                </div>
+
                                 <h4 class="font-bold text-slate-900"><?php echo $item['name']; ?></h4>
                                 <p class="text-xs text-slate-500 mt-1 leading-relaxed"><?php echo $item['desc']; ?></p>
                             </label>
@@ -144,16 +143,6 @@ $addOns = [
     </main>
 </div>
 
-<!-- incress decress button js start-->
-<script>
-    let count = 1;
-    const valueEl = document.getElementById('value');
-    document.getElementById('increase').onclick = () => valueEl.textContent = ++count;
-    document.getElementById('decrease').onclick = () => {
-        if (count > 0) valueEl.textContent = --count;
-    };
-</script>]
-<!-- incress decress button js end-->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const basePrice = <?php echo $basePrice; ?>;
@@ -163,14 +152,48 @@ $addOns = [
         const packageList = document.getElementById('packageFeatureList');
         const confirmBtn = document.getElementById('confirmBtn');
 
-        // Toggle Section logic
+        // ১. কোয়ান্টিটি কন্ট্রোল লজিক
+        document.querySelectorAll('.addon-item-container').forEach(container => {
+            const decBtn = container.querySelector('.decrease-btn');
+            const incBtn = container.querySelector('.increase-btn');
+            const qtyValue = container.querySelector('.qty-value');
+            const priceDisplay = container.querySelector('.item-price-display');
+            const checkbox = container.querySelector('.addon-checkbox');
+            const originalPrice = parseFloat(checkbox.dataset.price);
+
+            // স্টপ প্রোপাগেশন যাতে বাটনে ক্লিক করলে চেকবক্স ট্রিগার না হয়
+            [decBtn, incBtn].forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+
+            incBtn.addEventListener('click', () => {
+                let val = parseInt(qtyValue.textContent);
+                val++;
+                qtyValue.textContent = val;
+                priceDisplay.textContent = `+$${(originalPrice * val).toFixed(2)}`;
+            });
+
+            decBtn.addEventListener('click', () => {
+                let val = parseInt(qtyValue.textContent);
+                if (val > 1) {
+                    val--;
+                    qtyValue.textContent = val;
+                    priceDisplay.textContent = `+$${(originalPrice * val).toFixed(2)}`;
+                }
+            });
+        });
+
+        // ২. শো/হাইড সেকশন
         showBtn.addEventListener('click', function() {
             if (extraSection.classList.contains('hidden')) {
                 extraSection.classList.remove('hidden');
-                requestAnimationFrame(() => {
+                setTimeout(() => {
                     extraSection.style.opacity = '1';
                     extraSection.style.transform = 'translateY(0)';
-                });
+                }, 10);
                 document.getElementById('btnText').innerText = 'Close Add-ons';
                 document.getElementById('arrowIcon').classList.add('rotate-180');
             } else {
@@ -182,39 +205,46 @@ $addOns = [
             }
         });
 
-        // Confirm & Update Logic
+        // ৩. কনফার্ম বাটন ফিক্সড লজিক
         confirmBtn.addEventListener('click', function() {
             let additionalPrice = 0;
 
-            // পুরাতন অ্যাড-অনগুলো লিস্ট থেকে রিমুভ করা (যাতে ডুপ্লিকেট না হয়)
-            const oldAddons = document.querySelectorAll('.dynamic-addon');
-            oldAddons.forEach(el => el.remove());
+            // আগের ডাইনামিক আইটেমগুলো ক্লিন করা
+            document.querySelectorAll('.dynamic-addon').forEach(el => el.remove());
 
-            // সব চেক করা আইটেম লুপ করা
+            // শুধুমাত্র সিলেক্টেড (Checked) চেকবক্সগুলো নিয়ে লুপ
             const checkedAddons = document.querySelectorAll('.addon-checkbox:checked');
 
             checkedAddons.forEach(addon => {
-                const price = parseFloat(addon.dataset.price);
+                const container = addon.closest('.addon-item-container');
+                const qty = parseInt(container.querySelector('.qty-value').textContent);
+                const unitPrice = parseFloat(addon.dataset.price);
                 const name = addon.dataset.name;
-                additionalPrice += price;
 
-                // প্যাকেজ লিস্টে নতুন আইটেম যোগ করা
+                // ক্যালকুলেশন: কোয়ান্টিটি * ইউনিট প্রাইস
+                const subTotal = unitPrice * qty;
+                additionalPrice += subTotal;
+
+                // বাম পাশের লিস্টে অ্যাড করা
                 const li = document.createElement('li');
-                li.className = 'flex items-start dynamic-addon animate-fade-in'; // এনিমেশন ক্লাস
+                li.className = 'flex items-start dynamic-addon animate-fade-in';
                 li.innerHTML = `
                 <div class="mt-1 bg-blue-100 rounded-full p-1 text-blue-600 shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
-                <span class="ml-3 text-blue-800 font-semibold text-sm md:text-base">${name}</span>
+                <span class="ml-3 text-blue-800 font-semibold text-sm md:text-base">${name} <span class="text-blue-500 font-bold">(x${qty})</span></span>
             `;
                 packageList.appendChild(li);
             });
 
-            // টোটাল প্রাইস আপডেট
+            // ফাইনাল টোটাল ডিসপ্লে আপডেট
             const finalTotal = basePrice + additionalPrice;
-            totalPriceDisplay.innerText = finalTotal.toFixed(2);
+            totalPriceDisplay.innerText = finalTotal.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
 
-            // ইউজারকে ফিডব্যাক দেওয়া (অটো ক্লোজ বা স্ক্রল)
+            // স্ক্রল করে উপরে নিয়ে যাওয়া
             window.scrollTo({
                 top: 100,
                 behavior: 'smooth'
@@ -238,6 +268,12 @@ $addOns = [
 
     .animate-fade-in {
         animation: fadeIn 0.4s ease forwards;
+    }
+
+    #extraSecuritySection {
+        opacity: 0;
+        transform: translateY(1rem);
+        transition: all 0.5s ease;
     }
 </style>
 
