@@ -34,7 +34,7 @@ $addOns = [
         <div class="flex flex-col lg:flex-row justify-center items-start gap-8 max-w-7xl mx-auto">
 
             <div
-                class="w-full lg:w-[420px] shrink-0 bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden sticky top-10">
+                class="w-full lg:w-[420px] shrink-0 bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden ">
                 <div class="bg-[#045CB4]! p-8 text-white relative overflow-hidden">
                     <div class="relative z-10">
                         <span
@@ -277,6 +277,28 @@ $addOns = [
     });
 </script>
 
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
 
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease forwards;
+    }
+
+    #extraSecuritySection {
+        opacity: 0;
+        transform: translateY(1rem);
+        transition: all 0.5s ease;
+    }
+</style>
 
 <?php get_footer(); ?>
