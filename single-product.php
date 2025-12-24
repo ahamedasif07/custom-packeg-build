@@ -68,9 +68,14 @@ $addOns = [
                     </ul>
 
                     <div class="flex flex-col">
-                        <button
-                            class="w-full bg-[#045CB4]! hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-[0.98]">Purchase
-                            Package</button>
+                        <button class="w-full bg-[#045CB4] hover:bg-blue-700 text-white! py-4 rounded-2xl
+           transition-all shadow-lg active:scale-[0.98]
+           focus:outline-none focus:ring-0 focus:border-none">
+                            <a href="<?php echo home_url('/chack-out'); ?>"
+                                class="text-white! font-bold focus:outline-none! focus:ring-0! focus:border-none!">
+                                Purchase Package
+                            </a>
+                        </button>
                         <div class="h-4"></div>
                         <button id="showAddonsBtn"
                             class="w-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 group">
