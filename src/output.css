@@ -246,6 +246,12 @@
   .absolute {
     position: absolute;
   }
+  .fixed {
+    position: fixed;
+  }
+  .fixed\! {
+    position: fixed !important;
+  }
   .relative {
     position: relative;
   }
@@ -471,6 +477,9 @@
   .h-64 {
     height: calc(var(--spacing) * 64);
   }
+  .h-96 {
+    height: calc(var(--spacing) * 96);
+  }
   .min-h-screen {
     min-height: 100vh;
   }
@@ -650,6 +659,18 @@
   .overflow-hidden {
     overflow: hidden;
   }
+  .overflow-y-auto {
+    overflow-y: auto;
+  }
+  .overflow-y-scroll {
+    overflow-y: scroll;
+  }
+  .overscroll-contain {
+    overscroll-behavior: contain;
+  }
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
   .rounded {
     border-radius: 0.25rem;
   }
@@ -658,6 +679,9 @@
   }
   .rounded-3xl {
     border-radius: var(--radius-3xl);
+  }
+  .rounded-3xl\! {
+    border-radius: var(--radius-3xl) !important;
   }
   .rounded-full {
     border-radius: calc(infinity * 1px);
@@ -863,6 +887,9 @@
   }
   .pt-6 {
     padding-top: calc(var(--spacing) * 6);
+  }
+  .pr-2 {
+    padding-right: calc(var(--spacing) * 2);
   }
   .pb-0 {
     padding-bottom: calc(var(--spacing) * 0);

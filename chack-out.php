@@ -3,7 +3,7 @@
 get_header();
 ?>
 <div>
-    <div class="bg-slate-50 min-h-screen antialiased py-12 md:py-20">
+    <div class=" min-h-screen antialiased py-12 md:py-20">
         <div class="max-w-7xl mx-auto px-4">
 
             <div class="mb-10">
@@ -95,8 +95,8 @@ get_header();
 
                 <div class="w-full lg:w-1/3">
                     <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden sticky top-10">
-                        <div class="bg-slate-900 p-6 text-white">
-                            <h3 class="text-xl font-bold">Order Summary</h3>
+                        <div class="bg-[#045CB4]! p-6 text-white">
+                            <h3 class="text-xl text-white! font-bold">Order Summary</h3>
                         </div>
 
                         <div class="p-6">
@@ -172,10 +172,15 @@ get_header();
                     const li = document.createElement('li');
                     li.className = 'flex items-start text-sm text-slate-600';
                     li.innerHTML = `
-                        <svg class="w-4 h-4 text-green-500 mr-2 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>${feature}</span>
+                    <div class="mt-1 bg-green-100 rounded-full p-1 text-green-600 shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <span
+                                    class=" text-slate-700 font-medium text-sm md:text-base">${feature}</span>
+                       
                     `;
                     featuresContainer.appendChild(li);
                 });

@@ -277,28 +277,6 @@ $addOns = [
     });
 </script>
 
-<style>
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateX(-10px);
-        }
 
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    .animate-fade-in {
-        animation: fadeIn 0.4s ease forwards;
-    }
-
-    #extraSecuritySection {
-        opacity: 0;
-        transform: translateY(1rem);
-        transition: all 0.5s ease;
-    }
-</style>
 
 <?php get_footer(); ?>
