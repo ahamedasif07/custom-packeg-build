@@ -18,10 +18,18 @@ function asif_child_style()
 	$js_path = get_stylesheet_directory() . '/src/js/single-product.js';
 
 	wp_enqueue_script(
-		'single-product',
-		get_stylesheet_directory() . '/src/js/single-product.js',
-		[],
-
+		'single-product-script', // আমরা এই হ্যান্ডেল নামটি সব জায়গায় ব্যবহার করবো
+		get_stylesheet_directory_uri() . '/src/js/single-product.js',
+		array(),
+		null,
+		true // এটি ফুটার এ লোড হবে
+	);
+	wp_enqueue_script(
+		'chack-out-script', // আমরা এই হ্যান্ডেল নামটি সব জায়গায় ব্যবহার করবো
+		get_stylesheet_directory_uri() . '/src/js/chack-out.js',
+		array(),
+		null,
+		true // এটি ফুটার এ লোড হবে
 	);
 }
 

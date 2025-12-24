@@ -11,8 +11,18 @@ get_header();
  * Package Core Configuration
  * ======================================================= */
 
-$basePrice  = 29.99;
+
+$basePrice   = 29.99;
 $packageName = "Basic Protection";
+
+// এটি আপনার JS ফাইলের ঠিক আগে ডাটা ইনজেক্ট করবে
+wp_add_inline_script('single-product-script', 'const security_data = ' . json_encode([
+    'basePrice'   => $basePrice,
+    'packageName' => $packageName,
+]), 'before');
+
+get_header();
+
 
 /* =========================================================
  * Base Package Features
@@ -146,7 +156,7 @@ $addOns = [
                     <p class="text-slate-500 mt-1">Add extra layers of protection to your plan.</p>
                 </div>
 
-                <div class="grid grid-cols-1  gap-4">
+                <div id="addonScroll" class="grid grid-cols-1 overflow-y-scroll h-96 gap-4">
                     <?php foreach ($addOns as $item): ?>
                         <!-- Add-on Card -->
                         <div class="group relative addon-item-container">
@@ -169,7 +179,7 @@ $addOns = [
 
                                     <!-- Price + Checkbox -->
                                     <div class="text-right">
-                                        <span class="block text-sm font-bold text-blue-600 item-price-display">
+                                        <span class="block text-[22px]! font-bold pb-2 text-blue-600 item-price-display">
                                             +$<?php echo $item['price']; ?>
                                         </span>
 
@@ -219,179 +229,11 @@ $addOns = [
 </div>
 
 
-<script>
-    /**
-     * Single Product Add-ons Logic
-     * ----------------------------------------
-     * - Quantity control
-     * - Show / Hide add-ons
-     * - Price calculation
-     * - LocalStorage save
-     */
 
-    document.addEventListener('DOMContentLoaded', function() {
 
-        /* ======================================
-           Base Product Data (from PHP)
-        ====================================== */
-        const basePrice = <?php echo $basePrice; ?>;
-        const packageName = "<?php echo $packageName; ?>";
 
-        /* ======================================
-           DOM Elements
-        ====================================== */
-        const showBtn = document.getElementById('showAddonsBtn');
-        const extraSection = document.getElementById('extraSecuritySection');
-        const totalPriceDisplay = document.getElementById('totalPriceDisplay');
-        const packageList = document.getElementById('packageFeatureList');
-        const confirmBtn = document.getElementById('confirmBtn');
 
-        /* ======================================
-           1. Quantity Control Logic
-        ====================================== */
-        document.querySelectorAll('.addon-item-container').forEach(container => {
 
-            const decBtn = container.querySelector('.decrease-btn');
-            const incBtn = container.querySelector('.increase-btn');
-            const qtyValue = container.querySelector('.qty-value');
-            const priceDisplay = container.querySelector('.item-price-display');
-            const checkbox = container.querySelector('.addon-checkbox');
-            const originalPrice = parseFloat(checkbox.dataset.price);
-
-            // Prevent label toggle when clicking + / -
-            [decBtn, incBtn].forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                });
-            });
-
-            // Increase quantity
-            incBtn.addEventListener('click', () => {
-                let val = parseInt(qtyValue.textContent);
-                val++;
-                qtyValue.textContent = val;
-                priceDisplay.textContent = `+$${(originalPrice * val).toFixed(2)}`;
-            });
-
-            // Decrease quantity (minimum 1)
-            decBtn.addEventListener('click', () => {
-                let val = parseInt(qtyValue.textContent);
-                if (val > 1) {
-                    val--;
-                    qtyValue.textContent = val;
-                    priceDisplay.textContent = `+$${(originalPrice * val).toFixed(2)}`;
-                }
-            });
-        });
-
-        /* ======================================
-           2. Show / Hide Add-ons Section
-        ====================================== */
-        showBtn.addEventListener('click', function() {
-
-            if (extraSection.classList.contains('hidden')) {
-
-                // Show section
-                extraSection.classList.remove('hidden');
-                setTimeout(() => {
-                    extraSection.style.opacity = '1';
-                    extraSection.style.transform = 'translateY(0)';
-                }, 10);
-
-                document.getElementById('btnText').innerText = 'Close Add-ons';
-                document.getElementById('arrowIcon').classList.add('rotate-180');
-
-            } else {
-
-                // Hide section
-                extraSection.style.opacity = '0';
-                extraSection.style.transform = 'translateY(1rem)';
-
-                setTimeout(() => extraSection.classList.add('hidden'), 500);
-
-                document.getElementById('btnText').innerText = 'Add More Items';
-                document.getElementById('arrowIcon').classList.remove('rotate-180');
-            }
-        });
-
-        /* ======================================
-           3. Confirm Button & LocalStorage Logic
-        ====================================== */
-        confirmBtn.addEventListener('click', function() {
-
-            let additionalPrice = 0;
-            const selectedFeatures = [];
-
-            // Keep base features first
-            document
-                .querySelectorAll('#packageFeatureList li span:not(.dynamic-addon span)')
-                .forEach(span => {
-                    selectedFeatures.push(span.innerText.trim());
-                });
-
-            // Remove previous dynamic add-ons
-            document.querySelectorAll('.dynamic-addon').forEach(el => el.remove());
-
-            // Process selected add-ons
-            document.querySelectorAll('.addon-checkbox:checked').forEach(addon => {
-
-                const container = addon.closest('.addon-item-container');
-                const qty = parseInt(container.querySelector('.qty-value').textContent);
-                const unitPrice = parseFloat(addon.dataset.price);
-                const name = addon.dataset.name;
-
-                const subTotal = unitPrice * qty;
-                additionalPrice += subTotal;
-
-                // Append feature to UI list
-                const li = document.createElement('li');
-                li.className = 'flex items-start dynamic-addon animate-fade-in';
-                li.innerHTML = `
-                <div class="mt-1 bg-blue-100 rounded-full p-1 text-blue-600 shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="ml-3 text-blue-800 font-semibold text-sm md:text-base">
-                    ${name} <span class="text-blue-500 font-bold">(x${qty})</span>
-                </span>
-            `;
-                packageList.appendChild(li);
-
-                // Store feature info
-                selectedFeatures.push(`${name} (x${qty})`);
-            });
-
-            // Update total price
-            const finalTotal = (basePrice + additionalPrice).toFixed(2);
-            totalPriceDisplay.innerText = finalTotal;
-
-            // Save checkout data to localStorage
-            localStorage.setItem('securityCheckout', JSON.stringify({
-                packageName: packageName,
-                totalPrice: finalTotal,
-                features: selectedFeatures
-            }));
-
-            // Scroll user to top section
-            window.scrollTo({
-                top: 100,
-                behavior: 'smooth'
-            });
-
-            // Button feedback animation
-            const originalText = confirmBtn.innerText;
-            confirmBtn.innerText = "Updated!";
-            setTimeout(() => {
-                confirmBtn.innerText = originalText;
-            }, 2000);
-        });
-
-    });
-</script>
 
 
 <style>

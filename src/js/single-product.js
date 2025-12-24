@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const basePrice = "<?php echo $basePrice; ?>";
-  const packageName = "<?php echo $packageName; ?>";
+  const basePrice = parseFloat(security_data.basePrice);
+  const packageName = security_data.packageName;
   const showBtn = document.getElementById("showAddonsBtn");
   const extraSection = document.getElementById("extraSecuritySection");
   const totalPriceDisplay = document.getElementById("totalPriceDisplay");
