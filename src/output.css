@@ -953,8 +953,14 @@
   .text-\[16px\]\! {
     font-size: 16px !important;
   }
+  .text-\[22px\] {
+    font-size: 22px;
+  }
   .text-\[22px\]\! {
     font-size: 22px !important;
+  }
+  .text-\[26px\] {
+    font-size: 26px;
   }
   .text-\[26px\]\! {
     font-size: 26px !important;
@@ -1244,6 +1250,11 @@
       border-color: var(--color-blue-500);
     }
   }
+  .peer-checked\:bg-\[\#045CB4\]\! {
+    &:is(:where(.peer):checked ~ *) {
+      background-color: #045CB4 !important;
+    }
+  }
   .peer-checked\:bg-blue-50\/50 {
     &:is(:where(.peer):checked ~ *) {
       background-color: color-mix(in srgb, oklch(97% 0.014 254.604) 50%, transparent);
@@ -1260,6 +1271,11 @@
   .peer-checked\:text-blue-600 {
     &:is(:where(.peer):checked ~ *) {
       color: var(--color-blue-600);
+    }
+  }
+  .peer-checked\:text-white\! {
+    &:is(:where(.peer):checked ~ *) {
+      color: var(--color-white) !important;
     }
   }
   .peer-checked\:opacity-100 {

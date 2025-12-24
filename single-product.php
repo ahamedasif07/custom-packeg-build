@@ -101,16 +101,21 @@ $addOns = [
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <?php foreach ($addOns as $item): ?>
                         <div class="group relative addon-item-container">
-                            <input type="checkbox" class="addon-checkbox peer hidden" id="<?php echo $item['id']; ?>"
+                            <input type="checkbox" class="addon-checkbox peer " id="<?php echo $item['id']; ?>"
                                 data-name="<?php echo $item['name']; ?>" data-price="<?php echo $item['price']; ?>">
 
                             <label for="<?php echo $item['id']; ?>"
                                 class="block p-5 border-2 border-slate-100 rounded-2xl cursor-pointer transition-all peer-checked:border-blue-500 peer-checked:bg-blue-50/50 hover:border-blue-200">
+
                                 <div class="flex justify-between items-start mb-3">
-                                    <div
-                                        class="w-10 h-10  bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 peer-checked:bg-blue-100 group-hover:bg-[#045CB4]! transition-all duration-500! ease-in-out peer-checked:text-blue-600">
-                                        <svg class="w-6 h-6 group-hover:text-white! transition-all duration-500! ease-in-out"
-                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 
+                transition-all duration-500 ease-in-out
+                group-hover:bg-[#045CB4]! group-hover:text-white!
+                peer-checked:bg-[#045CB4]! peer-checked:text-white!">
+
+                                        <svg class="w-6 h-6 transition-all duration-500 ease-in-out 
+                    group-hover:text-white! 
+                    peer-checked:text-white!" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
@@ -121,14 +126,14 @@ $addOns = [
 
                                 <div class="flex items-center absolute bottom-3 left-5 mt-2! space-x-1 z-20">
                                     <button type="button"
-                                        class="qty-btn bg-transparent! decrease-btn w-5! h-5! border-gray-200! border!  rounded text-sm flex items-center justify-center hover:bg-gray-200 text-gray-900! mb-0.5! text-[26px]! shadow!">-</button>
+                                        class="qty-btn bg-transparent! decrease-btn w-5! h-5! border-gray-200! border! rounded text-sm flex items-center justify-center hover:bg-gray-200 text-gray-900! mb-0.5! text-[26px]! shadow!">-</button>
                                     <span class="qty-value w-6 text-center text-sm font-bold">1</span>
                                     <button type="button"
                                         class="qty-btn increase-btn w-5! h-5! bg-transparent! mb-0.5! border-gray-200! border! rounded text-sm flex items-center justify-center text-gray-900! hover:bg-gray-200 text-[22px]! shadow!">+</button>
                                 </div>
 
                                 <h4 class="font-bold text-slate-900"><?php echo $item['name']; ?></h4>
-                                <p class="text-xs text-slate-500  leading-relaxed"><?php echo $item['desc']; ?></p>
+                                <p class="text-xs text-slate-500 leading-relaxed"><?php echo $item['desc']; ?></p>
                             </label>
                         </div>
                     <?php endforeach; ?>

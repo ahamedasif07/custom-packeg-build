@@ -14,6 +14,15 @@ function asif_child_style()
 		[],
 		file_exists($tailwind_path) ? filemtime($tailwind_path) : null
 	);
+	// JS
+	$js_path = get_stylesheet_directory() . '/src/js/single-product.js';
+
+	wp_enqueue_script(
+		'single-product',
+		get_stylesheet_directory() . '/src/js/single-product.js',
+		[],
+
+	);
 }
 
 add_action('wp_enqueue_scripts', 'asif_child_style', 20);
