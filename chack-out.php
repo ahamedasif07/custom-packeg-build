@@ -182,26 +182,6 @@ get_header();
                 localStorage.removeItem('securityCheckout');
             });
         });
-
-        // local storage lopgic
-        // আপনার Single Product পেজের স্ক্রিপ্টের শেষে বা Confirm বাটনের ভেতরে এটি যোগ করুন
-        document.querySelector('#showAddonsBtn a').addEventListener('click', function(e) {
-            e.preventDefault();
-
-            const checkoutData = {
-                packageName: "<?php echo $packageName; ?>",
-                totalPrice: document.getElementById('totalPriceDisplay').innerText,
-                features: []
-            };
-
-            // সব ফিচার (বেসিক + ডাইনামিক) কালেক্ট করা
-            document.querySelectorAll('#packageFeatureList li span').forEach(span => {
-                checkoutData.features.push(span.innerText);
-            });
-
-            localStorage.setItem('securityCheckout', JSON.stringify(checkoutData));
-            window.location.href = this.href;
-        });
     </script>
 </div>
 <?php
