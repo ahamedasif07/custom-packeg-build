@@ -170,7 +170,7 @@ get_header();
             if (data.features && Array.isArray(data.features)) {
                 data.features.forEach(feature => {
                     const li = document.createElement('li');
-                    li.className = 'flex items-start text-sm text-slate-600';
+                    li.className = 'flex items-start gap-4 text-sm text-slate-600';
                     li.innerHTML = `
                     <div class="mt-1 bg-green-100 rounded-full p-1 text-green-600 shrink-0">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
