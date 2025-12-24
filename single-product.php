@@ -119,7 +119,6 @@ $addOns = [
                                         class="text-sm font-bold text-blue-600 item-price-display">+$<?php echo $item['price']; ?></span>
                                 </div>
 
-                                <!-- buttons to + - -->
                                 <div class="flex items-center absolute bottom-3 left-5 mt-2! space-x-1 z-20">
                                     <button type="button"
                                         class="qty-btn bg-transparent! decrease-btn w-5! h-5! border-gray-200! border!  rounded text-sm flex items-center justify-center hover:bg-gray-200 text-gray-900! mb-0.5! text-[26px]! shadow!">-</button>
@@ -152,6 +151,7 @@ $addOns = [
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const basePrice = <?php echo $basePrice; ?>;
+        const packageName = "<?php echo $packageName; ?>";
         const showBtn = document.getElementById('showAddonsBtn');
         const extraSection = document.getElementById('extraSecuritySection');
         const totalPriceDisplay = document.getElementById('totalPriceDisplay');
@@ -167,7 +167,6 @@ $addOns = [
             const checkbox = container.querySelector('.addon-checkbox');
             const originalPrice = parseFloat(checkbox.dataset.price);
 
-            // স্টপ প্রোপাগেশন যাতে বাটনে ক্লিক করলে চেকবক্স ট্রিগার না হয়
             [decBtn, incBtn].forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -211,50 +210,69 @@ $addOns = [
             }
         });
 
-        // ৩. কনফার্ম বাটন ফিক্সড লজিক
+        // ৩. কনফার্ম বাটন এবং লোকাল স্টোরেজ লজিক
         confirmBtn.addEventListener('click', function() {
             let additionalPrice = 0;
+            const selectedFeatures = [];
+
+            // বেসিক ফিচারগুলো আগে লিস্টে রাখা
+            document.querySelectorAll('#packageFeatureList li span:not(.dynamic-addon span)').forEach(
+                span => {
+                    selectedFeatures.push(span.innerText.trim());
+                });
 
             // আগের ডাইনামিক আইটেমগুলো ক্লিন করা
             document.querySelectorAll('.dynamic-addon').forEach(el => el.remove());
 
-            // শুধুমাত্র সিলেক্টেড (Checked) চেকবক্সগুলো নিয়ে লুপ
+            // সিলেক্টেড অ্যাড-অনস প্রসেসিং
             const checkedAddons = document.querySelectorAll('.addon-checkbox:checked');
-
             checkedAddons.forEach(addon => {
                 const container = addon.closest('.addon-item-container');
                 const qty = parseInt(container.querySelector('.qty-value').textContent);
                 const unitPrice = parseFloat(addon.dataset.price);
                 const name = addon.dataset.name;
 
-                // ক্যালকুলেশন: কোয়ান্টিটি * ইউনিট প্রাইস
                 const subTotal = unitPrice * qty;
                 additionalPrice += subTotal;
 
-                // বাম পাশের লিস্টে অ্যাড করা
+                // বাম পাশের লিস্টে অ্যাড করা (UI আপডেট)
                 const li = document.createElement('li');
                 li.className = 'flex items-start dynamic-addon animate-fade-in';
                 li.innerHTML = `
-                <div class="mt-1 bg-blue-100 rounded-full p-1 text-blue-600 shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
-                <span class="ml-3 text-blue-800 font-semibold text-sm md:text-base">${name} <span class="text-blue-500 font-bold">(x${qty})</span></span>
-            `;
+                    <div class="mt-1 bg-blue-100 rounded-full p-1 text-blue-600 shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <span class="ml-3 text-blue-800 font-semibold text-sm md:text-base">${name} <span class="text-blue-500 font-bold">(x${qty})</span></span>
+                `;
                 packageList.appendChild(li);
+
+                // অ্যারেতে পুশ করা
+                selectedFeatures.push(`${name} (x${qty})`);
             });
 
-            // ফাইনাল টোটাল ডিসপ্লে আপডেট
-            const finalTotal = basePrice + additionalPrice;
-            totalPriceDisplay.innerText = finalTotal.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
+            const finalTotal = (basePrice + additionalPrice).toFixed(2);
+            totalPriceDisplay.innerText = finalTotal;
 
-            // স্ক্রল করে উপরে নিয়ে যাওয়া
+            // ডেটা লোকাল স্টোরেজে সেভ করা
+            const checkoutData = {
+                packageName: packageName,
+                totalPrice: finalTotal,
+                features: selectedFeatures
+            };
+            localStorage.setItem('securityCheckout', JSON.stringify(checkoutData));
+
+            // ইউজার ফিডব্যাক: স্ক্রল আপ
             window.scrollTo({
                 top: 100,
                 behavior: 'smooth'
             });
+
+            // ঐচ্ছিক: বাটন টেক্সট পরিবর্তন করে ইউজারকে বোঝানো যে সেভ হয়েছে
+            const originalText = confirmBtn.innerText;
+            confirmBtn.innerText = "Updated!";
+            setTimeout(() => {
+                confirmBtn.innerText = originalText;
+            }, 2000);
         });
     });
 </script>

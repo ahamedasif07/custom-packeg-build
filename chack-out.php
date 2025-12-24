@@ -142,44 +142,57 @@ get_header();
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // LocalStorage থেকে ডেটা রিসিভ করা
+            // ১. LocalStorage থেকে ডেটা রিসিভ করা (Fetch data from storage)
             const savedData = localStorage.getItem('securityCheckout');
 
             if (!savedData) {
-                // যদি ডেটা না থাকে তবে প্রোডাক্ট পেজে ব্যাক করবে
+                // যদি ডেটা না থাকে তবে অটোমেটিক হোম পেজে পাঠিয়ে দিবে
+                console.log("datttttt", savedData);
                 window.location.href = '<?php echo home_url(); ?>';
                 return;
             }
 
+            // ২. JSON ডেটা পার্স করা (Parse the JSON string)
             const data = JSON.parse(savedData);
 
-            // UI আপডেট করা
-            document.getElementById('displayPackageName').innerText = data.packageName;
-            document.getElementById('displayTotalPrice').innerText = `$${data.totalPrice}`;
-            document.getElementById('finalPrice').innerText = `$${data.totalPrice}`;
+            // ৩. হেডার এবং প্রাইস আপডেট করা (Update UI Header and Prices)
+            document.getElementById('displayPackageName').innerText = data.packageName || "Plan Selected";
 
+            // নিশ্চিত করা হচ্ছে প্রাইস ফরম্যাট যেন ঠিক থাকে
+            const formattedPrice = data.totalPrice.startsWith('$') ? data.totalPrice : `$${data.totalPrice}`;
+            document.getElementById('displayTotalPrice').innerText = formattedPrice;
+            document.getElementById('finalPrice').innerText = formattedPrice;
+
+            // ৪. ফিচার লিস্ট ডাইনামিক করা (Render Dynamic Features List)
             const featuresContainer = document.getElementById('displayFeatures');
-            data.features.forEach(feature => {
-                const li = document.createElement('li');
-                li.className = 'flex items-start text-sm text-slate-600';
-                li.innerHTML = `
-            <svg class="w-4 h-4 text-green-500 mr-2 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span>${feature}</span>
-        `;
-                featuresContainer.appendChild(li);
-            });
+            featuresContainer.innerHTML = ''; // আগের স্ট্যাটিক ডেটা পরিষ্কার করা
 
-            // ফর্ম সাবমিট হ্যান্ডলার
+            if (data.features && Array.isArray(data.features)) {
+                data.features.forEach(feature => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start text-sm text-slate-600';
+                    li.innerHTML = `
+                        <svg class="w-4 h-4 text-green-500 mr-2 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>${feature}</span>
+                    `;
+                    featuresContainer.appendChild(li);
+                });
+            }
+
+            // ৫. ফর্ম সাবমিট হ্যান্ডলার (Form Submission Handler)
             document.getElementById('checkoutForm').addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                // এখানে আপনি আপনার AJAX বা Email পাঠানোর লজিক লিখতে পারেন
-                alert('Thank you! Your order for ' + data.packageName + ' has been placed.');
+                // অর্ডারের একটি সাকসেস মেসেজ দেখানো
+                alert('Thank you! Your order for ' + data.packageName + ' has been placed successfully.');
 
-                // ক্লিয়ার ডেটা
+                // অর্ডার শেষে লোকাল স্টোরেজ ক্লিয়ার করা
                 localStorage.removeItem('securityCheckout');
+
+                // ইচ্ছা করলে এখানে ইউজারকে রিডাইরেক্ট করতে পারেন
+                // window.location.href = '<?php echo home_url('/thank-you'); ?>';
             });
         });
     </script>
